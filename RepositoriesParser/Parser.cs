@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace RepositoriesParser
@@ -11,38 +8,50 @@ namespace RepositoriesParser
     public class Parser
     {
         private const string alphabet = "abcdefghijklmnopqrstuvwxyz";
-        private const string nickPattern = @"<a class=""avatar-link"" href=""/";
-        private const string nextPagePattern = @"<a href=""/repo/all/2?name=[a-z]{2}&language=html%2Fcss""";
-        private string result;
-
+        private const string nickPattern = @"<a class=""avatar-link"" href=""/(?<nickName>[^/]+)";
+        private const string nextPagePattern = @"/repo/all/{0}\?name=[a-z]+&language=javascript"; // language=html%2Fcss
+        private const string bitBucket = "https://bitbucket.org{0}";
+        private string searchLink = "/repo/all?name={0}&language=html%2Fcss";
+        private string source = string.Empty;
+        public int requestCounter = 0;
         private IEnumerable<string> SearchQuery()
         {
             return alphabet.SelectMany(x => alphabet.Select(y => x.ToString() + y.ToString()));
         }
 
-        private int SearchEndNick(int startPosition)
+        private void GetSource(string searchParameter)
         {
-            while(true)
+            var link = string.Format(bitBucket, searchParameter);
+            using (var client = new WebClient())
             {
-                if (result[startPosition++] == '/') return startPosition - 2;
+                source = client.DownloadString(link);
+                requestCounter++;
             }
         }
 
-        public IEnumerable<string> GetUsers(string searchParameter)
+        public IEnumerable<string> GetUser()
         {
-            using (var client = new WebClient())
+            var currentPage = 1;
+            Match nextPage;
+            foreach (var item in SearchQuery())
             {
-                foreach (var item in SearchQuery())
+                var path = string.Format(searchLink, item);
+                currentPage = 1;
+                do
                 {
-                    var path = "https://bitbucket.org/repo/all?name=" + item + "&language=html%2Fcss";
-                    result = client.DownloadString(path);
+                    var nextPageLink = string.Format(nextPagePattern, ++currentPage);
+                    nextPage = Regex.Match(source, nextPageLink);
+                    if (nextPage.Success)
+                        GetSource(nextPage.Value);
+                    else
+                        GetSource(path);
 
-                    var matches = Regex.Matches(result, nickPattern);
+                    var matches = Regex.Matches(source, nickPattern);
                     foreach (Match match in matches)
                     {
-                        
+                        yield return match.Groups["nickName"].Value;
                     }
-                }
+                } while (nextPage.Success);
             }
         }
     }
