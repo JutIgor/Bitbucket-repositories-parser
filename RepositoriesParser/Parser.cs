@@ -55,5 +55,10 @@ namespace RepositoriesParser
                 } while (nextPage.Success);
             }
         }
+
+        public IEnumerable<string> GetRepository(string userName)
+        {
+
+        }
     }
 }
