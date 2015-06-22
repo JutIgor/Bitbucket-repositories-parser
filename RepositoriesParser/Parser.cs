@@ -14,6 +14,7 @@ namespace RepositoriesParser
         private string searchLink = "/repo/all?name={0}&language=javascript"; // language=html%2Fcss
         private string source = string.Empty;
         public int requestCounter = 0;
+
         private IEnumerable<string> SearchQuery()
         {
             return alphabet.SelectMany(x => alphabet.Select(y => x.ToString() + y.ToString()));
