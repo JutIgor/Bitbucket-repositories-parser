@@ -28,7 +28,7 @@ namespace Program
                 exceptions.Add(key++,ex.ToString());
             }
 
-            using (var writer = new StreamWriter("outputJS.txt", false, System.Text.Encoding.Unicode))
+            using (var writer = new StreamWriter("outputJS.txt", false, System.Text.Encoding.Unicode))  // outputJS
             {
                 foreach (var item in userList)
                 {

@@ -11,7 +11,7 @@ namespace RepositoriesParser
         private const string nickPattern = @"<a class=""avatar-link"" href=""/(?<nickName>[^/]+)";
         private const string nextPagePattern = @"/repo/all/{0}\?name=[a-z]+&language=javascript"; // language=html%2Fcss
         private const string bitBucket = "https://bitbucket.org{0}";
-        private string searchLink = "/repo/all?name={0}&language=html%2Fcss";
+        private string searchLink = "/repo/all?name={0}&language=javascript"; // language=html%2Fcss
         private string source = string.Empty;
         public int requestCounter = 0;
         private IEnumerable<string> SearchQuery()
