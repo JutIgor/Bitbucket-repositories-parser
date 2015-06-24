@@ -8,10 +8,6 @@ namespace RepositoriesParser
     public class Parser
     {
         private const string alphabet = "abcdefghijklmnopqrstuvwxyz";
-        private const string nickPattern = @"<a class=""avatar-link"" href=""/(?<nickName>[^/]+)";
-        private const string nextPagePattern = @"/repo/all/{0}\?name=[a-z]+&language=javascript"; // language=html%2Fcss
-        private const string bitBucket = "https://bitbucket.org{0}";
-        private string searchLink = "/repo/all?name={0}&language=javascript"; // language=html%2Fcss
         private string source = string.Empty;
         public int requestCounter = 0;
 
@@ -22,7 +18,7 @@ namespace RepositoriesParser
 
         private void GetSource(string searchParameter)
         {
-            var link = string.Format(bitBucket, searchParameter);
+            var link = string.Format(Links.bitbucketLink, searchParameter);
             using (var client = new WebClient())
             {
                 source = client.DownloadString(link);
@@ -30,24 +26,24 @@ namespace RepositoriesParser
             }
         }
 
-        public IEnumerable<string> GetUser()
+        public IEnumerable<string> GetUser(string language)
         {
             var currentPage = 1;
             Match nextPage;
             foreach (var item in SearchQuery())
             {
-                var path = string.Format(searchLink, item);
+                var path = string.Format(Links.searchLink, item, language);
                 currentPage = 1;
                 do
                 {
-                    var nextPageLink = string.Format(nextPagePattern, ++currentPage);
+                    var nextPageLink = string.Format(Patterns.nextSearchPagePattern, ++currentPage, language);
                     nextPage = Regex.Match(source, nextPageLink);
                     if (nextPage.Success)
                         GetSource(nextPage.Value);
                     else
                         GetSource(path);
 
-                    var matches = Regex.Matches(source, nickPattern);
+                    var matches = Regex.Matches(source, Patterns.nickPattern);
                     foreach (Match match in matches)
                     {
                         yield return match.Groups["nickName"].Value;
@@ -56,9 +52,26 @@ namespace RepositoriesParser
             }
         }
 
-        public IEnumerable<string> GetRepository(string userName)
+        public IEnumerable<string> GetRepository(List<string> userList, string language)
         {
+            var currentPage = 1;
+            Match nextPage;
+            foreach (var user in userList)
+            {
+                var path = string.Format(Links.userProfileLink, user);
+                currentPage = 1;
+                do
+                {
+                    var nextPageLink = string.Format(Patterns.nextProfilePagePattern, userName, ++currentPage);
+                    nextPage = Regex.Match(source, nextPageLink);
+                    if (nextPage.Success)
+                        GetSource(nextPage.Value);
+                    else
+                        GetSource(path);
 
+                    //var matches = Regex.Matches()
+                } while (nextPage.Success);
+            }
         }
     }
 }
