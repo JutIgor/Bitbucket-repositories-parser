@@ -16,7 +16,7 @@ namespace Program
             
             try
             {
-                foreach (var item in parser.GetUser())
+                foreach (var item in parser.GetUser(Language.HtmlCss))
                 {
                     if (!userList.ContainsValue(item))
                         userList.Add(key++, item);

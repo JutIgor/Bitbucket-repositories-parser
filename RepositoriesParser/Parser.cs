@@ -7,12 +7,14 @@ namespace RepositoriesParser
 {
     public class Parser
     {
-        private const string alphabet = "abcdefghijklmnopqrstuvwxyz";
         private string source = string.Empty;
+        private Match nextPage;
+        private int currentPage = 1;
         public int requestCounter = 0;
 
         private IEnumerable<string> SearchQuery()
         {
+            var alphabet = "abcdefghijklmnopqrstuvwxyz";
             return alphabet.SelectMany(x => alphabet.Select(y => x.ToString() + y.ToString()));
         }
 
@@ -28,8 +30,6 @@ namespace RepositoriesParser
 
         public IEnumerable<string> GetUser(string language)
         {
-            var currentPage = 1;
-            Match nextPage;
             foreach (var item in SearchQuery())
             {
                 var path = string.Format(Links.searchLink, item, language);
@@ -52,26 +52,23 @@ namespace RepositoriesParser
             }
         }
 
-        public IEnumerable<string> GetRepository(List<string> userList, string language)
+        public IEnumerable<string> GetRepository(string userName, string language)
         {
-            var currentPage = 1;
-            Match nextPage;
-            foreach (var user in userList)
+            var path = string.Format(Links.userProfileLink, userName);
+            GetSource(path);
+            do
             {
-                var path = string.Format(Links.userProfileLink, user);
-                currentPage = 1;
-                do
-                {
-                    var nextPageLink = string.Format(Patterns.nextProfilePagePattern, userName, ++currentPage);
-                    nextPage = Regex.Match(source, nextPageLink);
-                    if (nextPage.Success)
-                        GetSource(nextPage.Value);
-                    else
-                        GetSource(path);
+                var nextPageLink = string.Format(Patterns.nextProfilePagePattern, userName, ++currentPage);
+                nextPage = Regex.Match(source, nextPageLink);
 
-                    //var matches = Regex.Matches()
-                } while (nextPage.Success);
-            }
+                var matches = Regex.Matches(source, Patterns.repositoryPattern);
+                foreach (Match match in matches)
+                {
+                    yield return match.Groups["repoName"].Value;
+                }
+                if (nextPage.Success)
+                    GetSource(nextPage.Value);
+            } while (nextPage.Success);
         }
     }
 }
