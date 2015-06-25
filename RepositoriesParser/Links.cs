@@ -1,5 +1,4 @@
-﻿
-namespace RepositoriesParser
+﻿namespace RepositoriesParser
 {
     public class Links
     {
