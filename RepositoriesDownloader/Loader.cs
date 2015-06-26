@@ -10,9 +10,9 @@ namespace RepositoriesDownloader
         private const string downloadZipLink = "https://bitbucket.org/{0}/{1}/get/{2}.zip"; // https://bitbucket.org/{username}/{repository}/get/default.zip default/master
         private const string gitRepo = "master";
         private const string hgRepo = "default";
-        private const string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        private const string archiveDirectory = appDirectory + @"\..\..\..\Repositories\";
-        private const string archiveName = archiveDirectory + "{0}-{1}.zip";
+        private static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        private static string archiveDirectory = appDirectory + @"\..\..\..\Repositories\";
+        private static string archiveName = archiveDirectory + "{0}-{1}.zip";
 
         public Loader()
         {
