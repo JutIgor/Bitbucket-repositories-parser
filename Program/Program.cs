@@ -1,6 +1,7 @@
 ﻿using RepositoriesParser;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 
 namespace Program
@@ -9,12 +10,19 @@ namespace Program
     {
         static void Main(string[] args)
         {
-            string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string filePath = appDirectory + @"\..\..\..\{0}.txt";
-            string HtmlCssFile = string.Format(filePath, "HtmlCssUsers");
-            string JavaScriptFile = string.Format(filePath, "JavaScriptUsers");
-            string HtmlCssRepositoriesFile = string.Format(filePath, "HtmlCssRepositories");
-            string JavaScriptRepositoriesFile = string.Format(filePath, "JavaScriptRepositories");
+            var appDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            var filePath = appDirectory + @"\..\..\..\Bitbucket\{0}.txt";
+            var HtmlCssFile = string.Format(filePath, "HtmlCssUsers");
+            var JavaScriptFile = string.Format(filePath, "JavaScriptUsers");
+            var HtmlCssRepositoriesFile = string.Format(filePath, "HtmlCssRepositories");
+            var JavaScriptRepositoriesFile = string.Format(filePath, "JavaScriptRepositories");
+            var HtmlCssFolder = appDirectory + @"\..\..\..\Bitbucket\HtmlCss\{0}";
+            var JavaScriptFolder = appDirectory + @"\..\..\..\Bitbucket\JavaScript\{0}";
+
+            var newDirectoryPath = string.Format(HtmlCssFolder, string.Empty);
+            Directory.CreateDirectory(newDirectoryPath);
+            newDirectoryPath = string.Format(JavaScriptFolder, string.Empty);
+            Directory.CreateDirectory(newDirectoryPath);
 
             try
             {
@@ -22,7 +30,8 @@ namespace Program
                 var JavaScriptUsers = GetUsers(JavaScriptFile, Language.JavaScript);
                 var HtmlCssRepositories = GetRepositories(HtmlCssRepositoriesFile, HtmlCssusers, Language.HtmlCss);
                 var JavaScriptRepositories = GetRepositories(JavaScriptRepositoriesFile, JavaScriptUsers, Language.JavaScript);
-                // TODO: add 2 folders ofr repo and add code to download it
+                
+                // TODO: Download all repos
             }
             catch (WebException ex)
             {
