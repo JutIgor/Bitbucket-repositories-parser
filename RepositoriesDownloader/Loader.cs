@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -9,9 +10,14 @@ namespace RepositoriesDownloader
         private const string downloadZipLink = "https://bitbucket.org/{0}/{1}/get/{2}.zip"; // https://bitbucket.org/{username}/{repository}/get/default.zip default/master
         private const string gitRepo = "master";
         private const string hgRepo = "default";
-
         private const string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        private const string archiveName = @"{0}\repositories\{1}.zip"; // TODO: Check
+        private const string archiveDirectory = appDirectory + @"\..\..\..\Repositories\";
+        private const string archiveName = archiveDirectory + "{0}-{1}.zip";
+
+        public Loader()
+        {
+            Directory.CreateDirectory(archiveDirectory);
+        }
 
         public async Task<string> DownloadZipAsync(string nickName, string repository)
         {
@@ -33,7 +39,7 @@ namespace RepositoriesDownloader
                 {
                     if (ex.Status == WebExceptionStatus.ProtocolError)
                         link = string.Format(downloadZipLink, nickName, repository, hgRepo);
-                    if (++attemptCounter == 3)
+                    if (attemptCounter++ == 3)
                         throw new WebException("An error occurred during the download: " + archiveName);
                     continue;
                 }
