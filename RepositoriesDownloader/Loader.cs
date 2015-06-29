@@ -1,13 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 
 namespace RepositoriesDownloader
 {
     public class Loader
     {
-        private const string downloadZipLink = "https://bitbucket.org/{0}/{1}/get/{2}.zip"; // https://bitbucket.org/{username}/{repository}/get/default.zip default/master
+        private const string downloadZipLink = "https://bitbucket.org/{0}/get/{2}.zip"; // https://bitbucket.org/{username}/{repository}/get/default.zip default/master
         private const string gitRepo = "master";
         private const string hgRepo = "default";
         //private static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -20,9 +18,9 @@ namespace RepositoriesDownloader
         //    Directory.CreateDirectory(directory);
         //}
 
-        public async Task<string> DownloadZipAsync(string nickName, string repository, string language, string filePath)
+        public async Task<string> DownloadZipAsync(string repositoryName, string filePath)
         {
-            var link = string.Format(downloadZipLink, nickName, repository, gitRepo);
+            var link = string.Format(downloadZipLink, repositoryName, gitRepo);
             var attemptCounter = 0;
             //var archiveName = string.Format(archivePath, nickName, repository);
 
@@ -39,7 +37,7 @@ namespace RepositoriesDownloader
                 catch (WebException ex)
                 {
                     if (ex.Status == WebExceptionStatus.ProtocolError)
-                        link = string.Format(downloadZipLink, nickName, repository, hgRepo);
+                        link = string.Format(downloadZipLink, repositoryName, hgRepo);
                     if (attemptCounter++ == 3)
                         throw new WebException("An error occurred during the download: " + filePath);
                     continue;

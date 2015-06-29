@@ -1,37 +1,38 @@
-﻿using RepositoriesParser;
+﻿using RepositoriesDownloader;
+using RepositoriesParser;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Program
 {
     class Program
     {
+        private static Task<string> finishedTask = null;
+        private static List<Task<string>> downloads = new List<Task<string>>();
+        private static Loader loader = new Loader();
+
         static void Main(string[] args)
         {
-            var appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            var filePath = appDirectory + @"\..\..\..\Bitbucket\{0}.txt";
-            var HtmlCssFile = string.Format(filePath, "HtmlCssUsers");
-            var JavaScriptFile = string.Format(filePath, "JavaScriptUsers");
-            var HtmlCssRepositoriesFile = string.Format(filePath, "HtmlCssRepositories");
-            var JavaScriptRepositoriesFile = string.Format(filePath, "JavaScriptRepositories");
-            var HtmlCssFolder = appDirectory + @"\..\..\..\Bitbucket\HtmlCss\{0}";
-            var JavaScriptFolder = appDirectory + @"\..\..\..\Bitbucket\JavaScript\{0}";
+            var fileName = string.Empty;
 
-            var newDirectoryPath = string.Format(HtmlCssFolder, string.Empty);
+            var newDirectoryPath = string.Format(Pathes.HtmlCssFolder, string.Empty);
             Directory.CreateDirectory(newDirectoryPath);
-            newDirectoryPath = string.Format(JavaScriptFolder, string.Empty);
+            newDirectoryPath = string.Format(Pathes.JavaScriptFolder, string.Empty);
             Directory.CreateDirectory(newDirectoryPath);
 
             try
             {
-                var HtmlCssusers = GetUsers(HtmlCssFile, Language.HtmlCss);
-                var JavaScriptUsers = GetUsers(JavaScriptFile, Language.JavaScript);
-                var HtmlCssRepositories = GetRepositories(HtmlCssRepositoriesFile, HtmlCssusers, Language.HtmlCss);
-                var JavaScriptRepositories = GetRepositories(JavaScriptRepositoriesFile, JavaScriptUsers, Language.JavaScript);
-                
-                // TODO: Download all repos
+                var HtmlCssusers = GetUsers(Pathes.HtmlCssUsersFile, Language.HtmlCss);
+                var JavaScriptUsers = GetUsers(Pathes.JavaScriptUsersFile, Language.JavaScript);
+                var HtmlCssRepositories = GetRepositories(Pathes.HtmlCssRepositoriesFile, HtmlCssusers, Language.HtmlCss);
+                var JavaScriptRepositories = GetRepositories(Pathes.JavaScriptRepositoriesFile, JavaScriptUsers, Language.JavaScript);
+
+                DownloadRepositories(Pathes.HtmlCssRepositoriesFile, Pathes.HtmlCssFolder);
+                DownloadRepositories(Pathes.JavaScriptRepositoriesFile, Pathes.JavaScriptFolder);
+
             }
             catch (WebException ex)
             {
@@ -66,6 +67,22 @@ namespace Program
             }
             Writer.SaveRepositories(fileName, repositories);
             return repositories;
+        }
+
+        private static void DownloadRepositories(string repositoriesFileName, string folder)
+        {
+            string archiveName;
+            foreach (string repository in Reader.ReadRepositoreis(repositoriesFileName))
+            {
+                archiveName = repository.Replace('/', '-') + ".zip";
+                string.Format(folder, archiveName);
+                downloads.Add(loader.DownloadZipAsync(repository, folder));
+            }
+            while (downloads.Count > 0)
+            {
+                finishedTask = Task.WhenAny(downloads).Result;
+                downloads.Remove(finishedTask);
+            }
         }
     }
 }
