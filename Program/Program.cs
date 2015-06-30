@@ -56,7 +56,7 @@ namespace Program
 
         private static Dictionary<string, string> GetRepositories(string fileName, Dictionary<int, string> users, string language)
         {
-            var repositories = new Dictionary<string, string>();
+            var repositories = new Dictionary<string, string>(); // TODO: replace Dictionary because in general can exist repositories with same name
             var parser = new Parser();
             foreach (var userName in users)
             {

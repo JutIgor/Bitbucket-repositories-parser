@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Program", "Program\Program.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoriesDownloader", "RepositoriesDownloader\RepositoriesDownloader.csproj", "{1CB08727-338A-477D-83E7-F85101A0F380}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadService", "DownloadService\DownloadService.csproj", "{D9159C19-44D0-4584-B344-E81F30F64D8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1CB08727-338A-477D-83E7-F85101A0F380}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CB08727-338A-477D-83E7-F85101A0F380}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CB08727-338A-477D-83E7-F85101A0F380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9159C19-44D0-4584-B344-E81F30F64D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9159C19-44D0-4584-B344-E81F30F64D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9159C19-44D0-4584-B344-E81F30F64D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9159C19-44D0-4584-B344-E81F30F64D8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

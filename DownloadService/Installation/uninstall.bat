@@ -1,0 +1,2 @@
+sc delete DownloadService
+pause
