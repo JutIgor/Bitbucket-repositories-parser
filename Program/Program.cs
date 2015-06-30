@@ -18,20 +18,20 @@ namespace Program
         {
             var fileName = string.Empty;
 
-            var newDirectoryPath = string.Format(Pathes.HtmlCssFolder, string.Empty);
+            var newDirectoryPath = string.Format(Paths.HtmlCssFolder, string.Empty);
             Directory.CreateDirectory(newDirectoryPath);
-            newDirectoryPath = string.Format(Pathes.JavaScriptFolder, string.Empty);
+            newDirectoryPath = string.Format(Paths.JavaScriptFolder, string.Empty);
             Directory.CreateDirectory(newDirectoryPath);
 
             try
             {
-                var HtmlCssusers = GetUsers(Pathes.HtmlCssUsersFile, Language.HtmlCss);
-                var JavaScriptUsers = GetUsers(Pathes.JavaScriptUsersFile, Language.JavaScript);
-                var HtmlCssRepositories = GetRepositories(Pathes.HtmlCssRepositoriesFile, HtmlCssusers, Language.HtmlCss);
-                var JavaScriptRepositories = GetRepositories(Pathes.JavaScriptRepositoriesFile, JavaScriptUsers, Language.JavaScript);
+                var HtmlCssusers = GetUsers(Paths.HtmlCssUsersFile, Language.HtmlCss);
+                var JavaScriptUsers = GetUsers(Paths.JavaScriptUsersFile, Language.JavaScript);
+                var HtmlCssRepositories = GetRepositories(Paths.HtmlCssRepositoriesFile,Paths.HtmlCssUsersFile, Language.HtmlCss);
+                var JavaScriptRepositories = GetRepositories(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptUsersFile, Language.JavaScript);
 
-                DownloadRepositories(Pathes.HtmlCssRepositoriesFile, Pathes.HtmlCssFolder);
-                DownloadRepositories(Pathes.JavaScriptRepositoriesFile, Pathes.JavaScriptFolder);
+                DownloadRepositories(Paths.HtmlCssRepositoriesFile, Paths.HtmlCssFolder);
+                DownloadRepositories(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptFolder);
 
             }
             catch (WebException ex)
@@ -54,15 +54,17 @@ namespace Program
             return users;
         }
 
-        private static Dictionary<string, string> GetRepositories(string fileName, Dictionary<int, string> users, string language)
+        private static List<Tuple<string, string>> GetRepositories(string fileName, string usersFileName, string language)
         {
-            var repositories = new Dictionary<string, string>(); // TODO: replace Dictionary because in general can exist repositories with same name
+            //var repositories = new Dictionary<string, string>(); // TODO: replace Dictionary because in generalB can exist repositories with same name
+            var repositories = new List<Tuple<string, string>>();
             var parser = new Parser();
-            foreach (var userName in users)
+            foreach (var userName in Reader.ReadFile(usersFileName))
             {
-                foreach (var item in parser.GetRepository(userName.Value, language))
+                foreach (var item in parser.GetRepository(userName, language))
                 {
-                    repositories.Add(item, userName.Value);
+                    repositories.Add(new Tuple<string, string>(userName, item));
+                    //repositories.Add(item, userName.Value);
                 }
             }
             Writer.SaveRepositories(fileName, repositories);
@@ -72,7 +74,7 @@ namespace Program
         private static void DownloadRepositories(string repositoriesFileName, string folder)
         {
             string archiveName;
-            foreach (string repository in Reader.ReadRepositoreis(repositoriesFileName))
+            foreach (string repository in Reader.ReadFile(repositoriesFileName))
             {
                 archiveName = repository.Replace('/', '-') + ".zip";
                 string.Format(folder, archiveName);

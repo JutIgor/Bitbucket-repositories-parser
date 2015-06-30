@@ -54,7 +54,7 @@ namespace RepositoriesParser
 
         public IEnumerable<string> GetRepository(string userName, string language)
         {
-            var path = string.Format(Links.userProfileLink, userName);
+            var path = string.Format(Links.userProfileLink, userName, language);
             GetSource(path);
             do
             {

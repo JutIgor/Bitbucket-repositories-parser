@@ -5,12 +5,12 @@ namespace Program
 {
     public class Reader
     {
-        public static IEnumerable<string> ReadRepositoreis(string fileName)
+        public static IEnumerable<string> ReadFile(string fileName)
         {
-            var repositories = new List<string>(File.ReadAllLines(fileName, System.Text.Encoding.Unicode));
-            foreach (var repository in repositories)
+            var content = new List<string>(File.ReadAllLines(fileName, System.Text.Encoding.Unicode));
+            foreach (var line in content)
             {
-                yield return repository;
+                yield return line;
             }
         }
     }

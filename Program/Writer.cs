@@ -25,7 +25,7 @@ namespace Program
             }
         }
 
-        public static bool SaveRepositories(string fileName, Dictionary<string, string> repositories)
+        public static bool SaveRepositories(string fileName, List<Tuple<string, string>> repositories)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Program
                 {
                     foreach (var item in repositories)
                     {
-                        writer.WriteLine("{0}/{1}", item.Value, item.Key);
+                        writer.WriteLine("{0}/{1}", item.Item1, item.Item2);
                     }
                 }
                 return true;
