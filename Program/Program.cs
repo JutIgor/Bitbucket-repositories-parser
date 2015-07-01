@@ -25,10 +25,10 @@ namespace Program
 
             try
             {
-                var HtmlCssusers = GetUsers(Paths.HtmlCssUsersFile, Language.HtmlCss);
-                var JavaScriptUsers = GetUsers(Paths.JavaScriptUsersFile, Language.JavaScript);
-                var HtmlCssRepositories = GetRepositories(Paths.HtmlCssRepositoriesFile,Paths.HtmlCssUsersFile, Language.HtmlCss);
-                var JavaScriptRepositories = GetRepositories(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptUsersFile, Language.JavaScript);
+                //var HtmlCssusers = GetUsers(Paths.HtmlCssUsersFile, Language.HtmlCss);
+                //var JavaScriptUsers = GetUsers(Paths.JavaScriptUsersFile, Language.JavaScript);
+                //var HtmlCssRepositories = GetRepositories(Paths.HtmlCssRepositoriesFile,Paths.HtmlCssUsersFile, Language.HtmlCss);
+                //var JavaScriptRepositories = GetRepositories(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptUsersFile, Language.JavaScript);
 
                 DownloadRepositories(Paths.HtmlCssRepositoriesFile, Paths.HtmlCssFolder);
                 DownloadRepositories(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptFolder);
@@ -74,11 +74,12 @@ namespace Program
         private static void DownloadRepositories(string repositoriesFileName, string folder)
         {
             string archiveName;
+            string fullPath;
             foreach (string repository in Reader.ReadFile(repositoriesFileName))
             {
                 archiveName = repository.Replace('/', '-') + ".zip";
-                string.Format(folder, archiveName);
-                downloads.Add(loader.DownloadZipAsync(repository, folder));
+                fullPath = string.Format(folder, archiveName);
+                downloads.Add(loader.DownloadZipAsync(repository, fullPath));
             }
             while (downloads.Count > 0)
             {
