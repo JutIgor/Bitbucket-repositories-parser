@@ -39,6 +39,7 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,14 +48,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadRepositories.cs" />
+    <Compile Include="RepositoriesDownloader.cs" />
     <Compile Include="DownloadService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DownloadService.Designer.cs">
       <DependentUpon>DownloadService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pathes.cs" />
+    <Compile Include="Paths.cs" />
+    <Compile Include="Patterns.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>
@@ -64,6 +66,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoriesReader.cs" />
+    <Compile Include="Serializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

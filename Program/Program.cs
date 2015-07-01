@@ -75,8 +75,10 @@ namespace Program
         {
             string archiveName;
             string fullPath;
+            var i = 0;
             foreach (string repository in Reader.ReadFile(repositoriesFileName))
             {
+                if (i++ == 2) break;
                 archiveName = repository.Replace('/', '-') + ".zip";
                 fullPath = string.Format(folder, archiveName);
                 downloads.Add(loader.DownloadZipAsync(repository, fullPath));

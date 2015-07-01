@@ -2,7 +2,7 @@
 
 namespace DownloadService
 {
-    public class Pathes
+    public class Paths
     {
         public static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public static string filePath = appDirectory + @"\..\..\..\Bitbucket\{0}.txt";
