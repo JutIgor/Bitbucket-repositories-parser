@@ -49,6 +49,8 @@ namespace DownloadService
         {
             threadHtmlCss = new Thread(downloaderHtmlCss.StartDownloadHtmlCss);
             threadJavaScript = new Thread(downloaderJavaScript.StartDownloadJavaScript);
+            threadHtmlCss.Start();
+            threadJavaScript.Start();
         }
 
         private void StopThreads()

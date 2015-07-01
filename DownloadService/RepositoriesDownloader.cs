@@ -43,18 +43,17 @@ namespace DownloadService
         {
             downloads.Clear();
             string archiveName;
+            string fullPath;
             foreach (string repository in RepositoriesReader.ReadRepositoreis(repositoriesFileName))
             {
-                if (finished.Contains(repository)) continue;
                 archiveName = repository.Replace('/', '-') + ".zip";
-                string.Format(folder, archiveName);
-                downloads.Add(loader.DownloadZipAsync(repository, folder));
+                fullPath = string.Format(folder, archiveName);
+                downloads.Add(loader.DownloadZipAsync(repository, fullPath));
             }
             while (downloads.Count > 0 && !isStopped) // Check while condition
             {
                 finishedTask = Task.WhenAny(downloads).Result;
                 downloads.Remove(finishedTask);
-                finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
             }
         }
     }
