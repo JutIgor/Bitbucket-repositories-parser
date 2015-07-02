@@ -18,6 +18,8 @@ namespace DownloadService
         private Task<string> finishedTask;
         [IgnoreDataMember]
         private bool isStopped;
+        [DataMember]
+        private bool isFinished;
 
         public void AllocateMemoryForDownloads()
         {
@@ -46,6 +48,7 @@ namespace DownloadService
             string fullPath;
             foreach (string repository in RepositoriesReader.ReadRepositoreis(repositoriesFileName))
             {
+                if (finished.Contains(repository)) continue;
                 archiveName = repository.Replace('/', '-') + ".zip";
                 fullPath = string.Format(folder, archiveName);
                 downloads.Add(loader.DownloadZipAsync(repository, fullPath));
@@ -54,7 +57,9 @@ namespace DownloadService
             {
                 finishedTask = Task.WhenAny(downloads).Result;
                 downloads.Remove(finishedTask);
+                finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
             }
+            if(downloads.Count == 0) isFinished = true; // TODO: Add a check end of downloader work
         }
     }
 }
