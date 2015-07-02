@@ -10,9 +10,9 @@ namespace DownloadService
         private static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
         private static string localDownloader = appDirectory + "Downloader{0}.xml";
 
-        public static void SerializeDownloader(RepositoriesDownloader downloader, string name)
+        public static void SerializeDownloader(RepositoriesDownloader downloader, string language)
         {
-            string localDownloaderName = string.Format(localDownloader, name);
+            string localDownloaderName = string.Format(localDownloader, language);
             using (var file = new FileStream(localDownloaderName, FileMode.OpenOrCreate))
             {
                 var serializer = new DataContractSerializer(typeof(RepositoriesDownloader));
@@ -20,9 +20,11 @@ namespace DownloadService
             }
         }
 
-        public static RepositoriesDownloader DeserializeDownloader(string name)
+        public static RepositoriesDownloader DeserializeDownloader(string language)
         {
-            string localDownloaderName = string.Format(localDownloader, name);
+            string localDownloaderName = string.Format(localDownloader, language);
+            // TODO: create xml file if it doewsn't exist
+            if (new FileInfo(localDownloaderName).Length == 0) return new RepositoriesDownloader();
             var serializer = new DataContractSerializer(typeof(RepositoriesDownloader));
             using (var file = new FileStream(localDownloaderName, FileMode.Open))
             {
@@ -33,6 +35,12 @@ namespace DownloadService
                     return downloader;
                 }
             }
+        }
+
+        public static void ClearDownloader(string language)
+        {
+            string localDownloaderName = string.Format(localDownloader, language);
+            File.WriteAllText(localDownloaderName, string.Empty);
         }
     }
 }

@@ -31,6 +31,8 @@
             // 
             // DownloadService
             // 
+            this.CanHandlePowerEvent = true;
+            this.CanHandleSessionChangeEvent = true;
             this.CanPauseAndContinue = true;
             this.CanShutdown = true;
             this.ServiceName = "DownloadService";

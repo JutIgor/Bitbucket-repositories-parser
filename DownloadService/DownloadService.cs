@@ -17,8 +17,6 @@ namespace DownloadService
 
         protected override void OnStart(string[] args)
         {
-            downloaderHtmlCss = new RepositoriesDownloader();
-            downloaderJavaScript = new RepositoriesDownloader();
             StartThreads();
         }
 
@@ -29,24 +27,22 @@ namespace DownloadService
 
         protected override void OnPause()
         {
-            Serializer.SerializeDownloader(downloaderHtmlCss, Patterns.HtmlCss);
-            Serializer.SerializeDownloader(downloaderJavaScript, Patterns.JavaScript);
             StopThreads();
         }
 
         protected override void OnContinue()
         {
-            downloaderHtmlCss = Serializer.DeserializeDownloader(Patterns.HtmlCss);
-            downloaderJavaScript = Serializer.DeserializeDownloader(Patterns.JavaScript);
+            StartThreads();
         }
 
         protected override void OnShutdown()
         {
-            base.OnShutdown();
+            StopThreads();
         }
 
         private void StartThreads()
         {
+            DeserializeDownloaders();
             threadHtmlCss = new Thread(downloaderHtmlCss.StartDownloadHtmlCss);
             threadJavaScript = new Thread(downloaderJavaScript.StartDownloadJavaScript);
             threadHtmlCss.Start();
@@ -57,8 +53,21 @@ namespace DownloadService
         {
             downloaderHtmlCss.Stop();
             downloaderJavaScript.Stop();
+            SerializeDownloaders();
             threadHtmlCss.Join();
             threadJavaScript.Join();
+        }
+
+        private void SerializeDownloaders()
+        {
+            Serializer.SerializeDownloader(downloaderHtmlCss, Patterns.HtmlCss);
+            Serializer.SerializeDownloader(downloaderJavaScript, Patterns.JavaScript);
+        }
+
+        private void DeserializeDownloaders()
+        {
+            downloaderHtmlCss = Serializer.DeserializeDownloader(Patterns.HtmlCss);
+            downloaderJavaScript = Serializer.DeserializeDownloader(Patterns.JavaScript);
         }
     }
 }

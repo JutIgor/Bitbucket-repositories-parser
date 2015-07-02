@@ -18,8 +18,17 @@ namespace DownloadService
         private Task<string> finishedTask;
         [IgnoreDataMember]
         private bool isStopped;
-        [DataMember]
-        private bool isFinished;
+        //[DataMember]
+        //private bool isFinished;
+        //[IgnoreDataMember]
+        //public bool IsComplete
+        //{
+        //    get
+        //    {
+        //        if (downloads.Count == 0 && isFinished) return true;
+        //        return false;
+        //    }
+        //}
 
         public void AllocateMemoryForDownloads()
         {
@@ -28,12 +37,12 @@ namespace DownloadService
 
         public void StartDownloadHtmlCss()
         {
-            Download(Paths.HtmlCssRepositoriesFile, Paths.HtmlCssFolder);
+            Download(Paths.HtmlCssRepositoriesFile, Paths.HtmlCssFolder, Patterns.HtmlCss);
         }
 
         public void StartDownloadJavaScript()
         {
-            Download(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptFolder);
+            Download(Paths.JavaScriptRepositoriesFile, Paths.JavaScriptFolder, Patterns.JavaScript);
         }
 
         public void Stop()
@@ -41,7 +50,7 @@ namespace DownloadService
             isStopped = true;
         }
 
-        public void Download(string repositoriesFileName, string folder)
+        public void Download(string repositoriesFileName, string folder, string language)
         {
             downloads.Clear();
             string archiveName;
@@ -59,7 +68,8 @@ namespace DownloadService
                 downloads.Remove(finishedTask);
                 finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
             }
-            if(downloads.Count == 0) isFinished = true; // TODO: Add a check end of downloader work
+            Serializer.ClearDownloader(language);
+            //if(downloads.Count == 0) isFinished = true; // TODO: Add a check end of downloader work
         }
     }
 }
