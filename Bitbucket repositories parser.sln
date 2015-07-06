@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Program", "Program\Program.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoriesDownloader", "RepositoriesDownloader\RepositoriesDownloader.csproj", "{1CB08727-338A-477D-83E7-F85101A0F380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadService", "DownloadService\DownloadService.csproj", "{D9159C19-44D0-4584-B344-E81F30F64D8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitbucketDownloadService", "BitbucketDownloadService\BitbucketDownloadService.csproj", "{D9159C19-44D0-4584-B344-E81F30F64D8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

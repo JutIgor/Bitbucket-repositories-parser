@@ -7,8 +7,8 @@
     <ProjectGuid>{D9159C19-44D0-4584-B344-E81F30F64D8E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DownloadService</RootNamespace>
-    <AssemblyName>DownloadService</AssemblyName>
+    <RootNamespace>BitbucketDownloadService</RootNamespace>
+    <AssemblyName>BitbucketDownloadService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -49,11 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RepositoriesDownloader.cs" />
-    <Compile Include="DownloadService.cs">
+    <Compile Include="BitbucketDownloadService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DownloadService.Designer.cs">
-      <DependentUpon>DownloadService.cs</DependentUpon>
+    <Compile Include="BitbucketDownloadService.Designer.cs">
+      <DependentUpon>BitbucketDownloadService.cs</DependentUpon>
     </Compile>
     <Compile Include="Paths.cs" />
     <Compile Include="Patterns.cs" />
@@ -72,8 +72,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DownloadService.resx">
-      <DependentUpon>DownloadService.cs</DependentUpon>
+    <EmbeddedResource Include="BitbucketDownloadService.resx">
+      <DependentUpon>BitbucketDownloadService.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
