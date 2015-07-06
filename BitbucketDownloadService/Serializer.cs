@@ -30,7 +30,7 @@ namespace DownloadService
                 using (var reader = XmlDictionaryReader.CreateTextReader(file, new XmlDictionaryReaderQuotas()))
                 {
                     var downloader = (RepositoriesDownloader)serializer.ReadObject(reader);
-                    downloader.AllocateMemoryForDownloads();
+                    downloader.AllocateMemory();
                     return downloader;
                 }
             }

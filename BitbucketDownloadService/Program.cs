@@ -17,7 +17,7 @@ namespace DownloadService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
-                new DownloadService() 
+                new BitbucketDownloadService() 
             };
             ServiceBase.Run(ServicesToRun);
         }

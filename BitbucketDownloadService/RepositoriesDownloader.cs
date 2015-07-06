@@ -18,21 +18,13 @@ namespace DownloadService
         private Task<string> finishedTask;
         [IgnoreDataMember]
         private bool isStopped;
-        //[DataMember]
-        //private bool isFinished;
-        //[IgnoreDataMember]
-        //public bool IsComplete
-        //{
-        //    get
-        //    {
-        //        if (downloads.Count == 0 && isFinished) return true;
-        //        return false;
-        //    }
-        //}
+        [IgnoreDataMember]
+        public bool isFinished;
 
-        public void AllocateMemoryForDownloads()
+        public void AllocateMemory()
         {
             this.downloads = new List<Task<string>>();
+            this.loader = new Loader();
         }
 
         public void StartDownloadHtmlCss()
@@ -68,8 +60,11 @@ namespace DownloadService
                 downloads.Remove(finishedTask);
                 finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
             }
-            Serializer.ClearDownloader(language);
-            //if(downloads.Count == 0) isFinished = true; // TODO: Add a check end of downloader work
+            if (downloads.Count == 0)
+            {
+                isFinished = true; // TODO: Add a check end of downloader work
+                Serializer.ClearDownloader(language);
+            }
         }
     }
 }

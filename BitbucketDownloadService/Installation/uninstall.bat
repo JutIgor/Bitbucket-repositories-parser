@@ -1,2 +1,2 @@
-sc delete DownloadService
+sc delete BitbucketDownloadService
 pause

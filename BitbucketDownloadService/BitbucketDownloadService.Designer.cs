@@ -1,6 +1,6 @@
 ﻿namespace DownloadService
 {
-    partial class DownloadService
+    partial class BitbucketDownloadService
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             // 
-            // DownloadService
+            // BitbucketDownloadService
             // 
             this.CanHandlePowerEvent = true;
             this.CanHandleSessionChangeEvent = true;
             this.CanPauseAndContinue = true;
             this.CanShutdown = true;
-            this.ServiceName = "DownloadService";
+            this.ServiceName = "BitbucketDownloadService";
 
         }
 

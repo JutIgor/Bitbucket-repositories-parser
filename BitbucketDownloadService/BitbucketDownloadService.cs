@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace DownloadService
 {
-    public partial class DownloadService : ServiceBase
+    public partial class BitbucketDownloadService : ServiceBase
     {
         private Thread threadHtmlCss;
         private Thread threadJavaScript;
         private RepositoriesDownloader downloaderHtmlCss;
         private RepositoriesDownloader downloaderJavaScript;
 
-        public DownloadService()
+        public BitbucketDownloadService()
         {
             InitializeComponent();
         }
