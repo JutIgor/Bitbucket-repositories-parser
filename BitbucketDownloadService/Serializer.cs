@@ -23,10 +23,10 @@ namespace DownloadService
         public static RepositoriesDownloader DeserializeDownloader(string language)
         {
             string localDownloaderName = string.Format(localDownloader, language);
-            if (new FileInfo(localDownloaderName).Length == 0) return new RepositoriesDownloader();
             var serializer = new DataContractSerializer(typeof(RepositoriesDownloader));
             using (var file = new FileStream(localDownloaderName, FileMode.OpenOrCreate)) // Check FileMode
             {
+                if (new FileInfo(localDownloaderName).Length == 0) return new RepositoriesDownloader();
                 using (var reader = XmlDictionaryReader.CreateTextReader(file, new XmlDictionaryReaderQuotas()))
                 {
                     var downloader = (RepositoriesDownloader)serializer.ReadObject(reader);
