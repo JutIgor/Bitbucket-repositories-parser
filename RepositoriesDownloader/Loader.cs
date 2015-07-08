@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace RepositoriesDownloader
@@ -32,7 +33,8 @@ namespace RepositoriesDownloader
                     using (var client = new WebClient())
                     {
                         await client.DownloadFileTaskAsync(link, filePath);
-                        return filePath;
+                        //return filePath;
+                        return repositoryName;
                     }
                 }
                 catch (WebException ex)
@@ -40,7 +42,10 @@ namespace RepositoriesDownloader
                     if (ex.Status == WebExceptionStatus.ProtocolError)
                         link = string.Format(downloadZipLink, repositoryName, hgRepo);
                     if (attemptCounter++ == 3)
+                    {
+                        File.Delete(filePath);
                         throw new WebException(string.Format(error, link, filePath));
+                    }
                     continue;
                 }
             }

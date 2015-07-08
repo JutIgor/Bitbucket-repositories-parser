@@ -4,13 +4,15 @@ namespace DownloadService
 {
     public static class Patterns
     {
-        private const string repositoryPattern = @"(HtmlCss|JavaScript)\\(?<repoName>[^.]+)";
+        private const string repositoryPathPattern = @"(HtmlCss|JavaScript)\\(?<repoName>[^.]+)";
+        private const string repositoryLinkPattern = @"org/(?<repoName>[^/]+/[^/]+)";
         public const string HtmlCss = "HtmlCss";
         public const string JavaScript = "JavaScript";
 
         public static string GetRepositoryName(string source)
         {
-            return Regex.Match(source, repositoryPattern).Groups["repoName"].Value.Replace('-', '/');
+            //return Regex.Match(source, repositoryPathPattern).Groups["repoName"].Value.Replace('-', '/');
+            return Regex.Match(source, repositoryLinkPattern).Groups["repoName"].Value;
         }
     }
 }

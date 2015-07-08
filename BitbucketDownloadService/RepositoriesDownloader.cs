@@ -23,10 +23,6 @@ namespace DownloadService
         private bool isStopped;
         [IgnoreDataMember]
         public bool isFinished;
-        [IgnoreDataMember]
-        private static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        [IgnoreDataMember]
-        private static string logName = appDirectory + "log.txt";
 
         public void AllocateMemory()
         {
@@ -68,7 +64,8 @@ namespace DownloadService
                     {
                         finishedTask = Task.WhenAny(downloads).Result;
                         downloads.Remove(finishedTask);
-                        finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
+                        //finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
+                        finished.Add(finishedTask.Result);
                         currentStreams--;
                     }
 
@@ -80,14 +77,14 @@ namespace DownloadService
                     if (ex.InnerException is WebException)
                     {
                         finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
-                        using (var writer = new StreamWriter(logName, true))
+                        using (var writer = new StreamWriter(Paths.logName, true))
                         {
                             writer.WriteLine(ex.InnerException.Message);
                         }
                     }
                     else
                     {
-                        using (var writer = new StreamWriter(logName, true))
+                        using (var writer = new StreamWriter(Paths.logName, true))
                         {
                             writer.WriteLine(ex.ToString());
                         }
