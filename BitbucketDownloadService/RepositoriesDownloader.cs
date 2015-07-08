@@ -68,7 +68,6 @@ namespace DownloadService
                         finished.Add(finishedTask.Result);
                         currentStreams--;
                     }
-
                     downloads.Add(loader.DownloadZipAsync(repository, fullPath));
                     currentStreams++;
                 }
@@ -79,7 +78,7 @@ namespace DownloadService
                         finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
                         using (var writer = new StreamWriter(Paths.logName, true))
                         {
-                            writer.WriteLine(ex.InnerException.Message);
+                            writer.WriteLine(ex.InnerException.Message); //ex.InnerException.Message
                         }
                     }
                     else
