@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DownloadService
@@ -23,11 +24,14 @@ namespace DownloadService
         private bool isStopped;
         [IgnoreDataMember]
         public bool isFinished;
+        [IgnoreDataMember]
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public void AllocateMemory()
         {
             this.downloads = new List<Task<string>>();
             this.loader = new Loader();
+            this.cts = new CancellationTokenSource();
         }
 
         public void StartDownloadHtmlCss()
@@ -56,7 +60,11 @@ namespace DownloadService
             {
                 try
                 {
-                    if (isStopped) break;
+                    if (isStopped)
+                    {
+                        if (cts != null) cts.Cancel();
+                        break;
+                    }
                     if (finished.Contains(repository)) continue;
                     archiveName = repository.Replace('/', '-') + ".zip";
                     fullPath = string.Format(folder, archiveName);
@@ -67,7 +75,7 @@ namespace DownloadService
                         finished.Add(finishedTask.Result);
                         currentStreams--;
                     }
-                    downloads.Add(loader.DownloadZipAsync(repository, fullPath));
+                    downloads.Add(loader.DownloadZipAsync(repository, fullPath, cts.Token));
                     currentStreams++;
                 }
                 catch (AggregateException ex)

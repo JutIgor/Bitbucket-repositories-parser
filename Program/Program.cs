@@ -81,7 +81,7 @@ namespace Program
                 if (i++ == 2) break;
                 archiveName = repository.Replace('/', '-') + ".zip";
                 fullPath = string.Format(folder, archiveName);
-                downloads.Add(loader.DownloadZipAsync(repository, fullPath));
+                //downloads.Add(loader.DownloadZipAsync(repository, fullPath));
             }
             while (downloads.Count > 0)
             {

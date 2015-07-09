@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RepositoriesDownloader
@@ -11,21 +14,26 @@ namespace RepositoriesDownloader
         private const string hgRepo = "default";
         private const string error = "An error occurred during the download: {0}";
 
-        public async Task<string> DownloadZipAsync(string repositoryName, string filePath)
+        public async Task<string> DownloadZipAsync(string repositoryName, string filePath, CancellationToken ct)
         {
             var link = string.Format(downloadZipLink, repositoryName, gitRepo);
             var attemptCounter = 0;
 
             while (true)
             {
+                using (var client = new WebClient())
+                    {
                 try
                 {
-                    using (var client = new WebClient())
-                    {
+                    //using (var client = new WebClient())
+                    //{
+                        ct.ThrowIfCancellationRequested();
                         await client.DownloadFileTaskAsync(link, filePath);
+                        
                         return repositoryName;
-                    }
+                    //}
                 }
+                
                 catch (WebException ex)
                 {
                     if (ex.Status == WebExceptionStatus.ProtocolError)
@@ -37,7 +45,15 @@ namespace RepositoriesDownloader
                     }
                     continue;
                 }
+                catch (OperationCanceledException)
+                {
+                    client.CancelAsync();
+                    throw new WebException("Im here!");
+                }
+                }
             }
         }
+
+
     }
 }
