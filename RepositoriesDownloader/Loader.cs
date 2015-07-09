@@ -10,21 +10,11 @@ namespace RepositoriesDownloader
         private const string gitRepo = "master";
         private const string hgRepo = "default";
         private const string error = "An error occurred during the download: {0}";
-        //private static string appDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        //private static string archiveDirectory = appDirectory + @"\..\..\..\Repositories\{0}"; // TODO: create HtmlCss and JS directories
-        //private static string archivePath = archiveDirectory + "{0}-{1}.zip";
-
-        //public Loader()
-        //{
-        //    var directory = string.Format(archiveDirectory, string.Empty); // check
-        //    Directory.CreateDirectory(directory);
-        //}
 
         public async Task<string> DownloadZipAsync(string repositoryName, string filePath)
         {
             var link = string.Format(downloadZipLink, repositoryName, gitRepo);
             var attemptCounter = 0;
-            //var archiveName = string.Format(archivePath, nickName, repository);
 
             while (true)
             {
@@ -33,7 +23,6 @@ namespace RepositoriesDownloader
                     using (var client = new WebClient())
                     {
                         await client.DownloadFileTaskAsync(link, filePath);
-                        //return filePath;
                         return repositoryName;
                     }
                 }

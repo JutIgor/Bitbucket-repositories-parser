@@ -11,7 +11,6 @@ namespace DownloadService
 
         public static string GetRepositoryName(string source)
         {
-            //return Regex.Match(source, repositoryPathPattern).Groups["repoName"].Value.Replace('-', '/');
             return Regex.Match(source, repositoryLinkPattern).Groups["repoName"].Value;
         }
     }

@@ -1,10 +1,10 @@
 ﻿using RepositoriesDownloader;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace DownloadService
 {
@@ -64,7 +64,6 @@ namespace DownloadService
                     {
                         finishedTask = Task.WhenAny(downloads).Result;
                         downloads.Remove(finishedTask);
-                        //finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
                         finished.Add(finishedTask.Result);
                         currentStreams--;
                     }
@@ -78,7 +77,7 @@ namespace DownloadService
                         finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
                         using (var writer = new StreamWriter(Paths.logName, true))
                         {
-                            writer.WriteLine(ex.InnerException.Message); //ex.InnerException.Message
+                            writer.WriteLine(ex.InnerException.Message);
                         }
                     }
                     else
@@ -91,17 +90,6 @@ namespace DownloadService
                     currentStreams--;
                     continue;
                 }
-                //catch (Exception ex)
-                //{
-                //    using (var writer = new StreamWriter(logName, true))
-                //    {
-                //        writer.WriteLine(ex.GetType());
-                //        writer.WriteLine("---");
-                //        writer.WriteLine(ex.ToString());
-                //    }
-                //    currentStreams--;
-                //    continue;
-                //}
             }
             if (!isStopped)
             {
@@ -109,42 +97,5 @@ namespace DownloadService
                 Serializer.ClearDownloader(language);
             }
         }
-
-
-        //foreach (string repository in RepositoriesReader.ReadRepositoreis(repositoriesFileName))
-        //{
-        //    if (finished.Contains(repository)) continue;
-        //    archiveName = repository.Replace('/', '-') + ".zip";
-        //    fullPath = string.Format(folder, archiveName);
-        //    downloads.Add(loader.DownloadZipAsync(repository, fullPath));
-        //}
-        //while (downloads.Count > 0 && !isStopped) // Check while condition
-        //{
-        //    finishedTask = Task.WhenAny(downloads).Result;
-        //    downloads.Remove(finishedTask);
-        //    finished.Add(Patterns.GetRepositoryName(finishedTask.Result));
-        //}
-        //if (downloads.Count == 0)
-        //{
-        //    isFinished = true; // TODO: Add a check end of downloader work
-        //    Serializer.ClearDownloader(language);
-        //}
-
-        //    var counter = 0;
-
-        //    var tasks = allUris.Take(maxConcurrentStreams).Select(x => DownloadAsync(x)).ToArray();
-
-        //    for (int i = maxConcurrentStreams; i < allUris.Count; i++)
-        //    {
-        //        counter = Task.WaitAny(tasks);
-        //        yield return tasks[counter].Result;
-        //        tasks[counter] = DownloadAsync(allUris[i]);
-        //    }
-        //    Task.WaitAll(tasks);
-        //foreach (var task in tasks)
-        //{
-        //    yield return task.Result;
-        //}
-        //}
     }
 }
