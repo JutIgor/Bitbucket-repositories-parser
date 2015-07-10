@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.ServiceProcess;
+﻿using System.ServiceProcess;
 using System.Threading;
 
 namespace DownloadService
