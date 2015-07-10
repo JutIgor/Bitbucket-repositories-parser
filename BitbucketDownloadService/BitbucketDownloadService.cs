@@ -1,4 +1,6 @@
-﻿using System.ServiceProcess;
+﻿using System;
+using System.IO;
+using System.ServiceProcess;
 using System.Threading;
 
 namespace DownloadService
@@ -54,8 +56,8 @@ namespace DownloadService
             downloaderHtmlCss.Stop();
             downloaderJavaScript.Stop();
             SerializeDownloaders();
-            threadHtmlCss.Join();
-            threadJavaScript.Join();
+            threadHtmlCss.Abort();
+            threadJavaScript.Abort();
         }
 
         private void SerializeDownloaders()

@@ -24,14 +24,11 @@ namespace DownloadService
         private bool isStopped;
         [IgnoreDataMember]
         public bool isFinished;
-        [IgnoreDataMember]
-        private CancellationTokenSource cts = new CancellationTokenSource();
 
         public void AllocateMemory()
         {
             this.downloads = new List<Task<string>>();
             this.loader = new Loader();
-            this.cts = new CancellationTokenSource();
         }
 
         public void StartDownloadHtmlCss()
@@ -49,7 +46,7 @@ namespace DownloadService
             isStopped = true;
         }
 
-        public void Download(string repositoriesFileName, string folder, string language) // TODO: Check repositories name '-' '/'
+        public void Download(string repositoriesFileName, string folder, string language)
         {
             downloads.Clear();
             string archiveName;
@@ -60,11 +57,7 @@ namespace DownloadService
             {
                 try
                 {
-                    if (isStopped)
-                    {
-                        if (cts != null) cts.Cancel();
-                        break;
-                    }
+                    if (isStopped) break;
                     if (finished.Contains(repository)) continue;
                     archiveName = repository.Replace('/', '-') + ".zip";
                     fullPath = string.Format(folder, archiveName);
@@ -75,25 +68,25 @@ namespace DownloadService
                         finished.Add(finishedTask.Result);
                         currentStreams--;
                     }
-                    downloads.Add(loader.DownloadZipAsync(repository, fullPath, cts.Token));
+                    downloads.Add(loader.DownloadZipAsync(repository, fullPath));
                     currentStreams++;
                 }
                 catch (AggregateException ex)
                 {
-                    if (ex.InnerException is WebException)
+                    finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
+                    using (var writer = new StreamWriter(Paths.logName, true))
                     {
-                        finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
-                        using (var writer = new StreamWriter(Paths.logName, true))
-                        {
-                            writer.WriteLine(ex.InnerException.Message);
-                        }
+                        writer.WriteLine(ex.InnerException.Message);
                     }
-                    else
+                    currentStreams--;
+                    continue;
+                }
+                catch (ThreadAbortException) { }
+                catch (Exception ex)
+                {
+                    using (var writer = new StreamWriter(Paths.logName, true))
                     {
-                        using (var writer = new StreamWriter(Paths.logName, true))
-                        {
-                            writer.WriteLine(ex.ToString());
-                        }
+                        writer.WriteLine(ex.ToString());
                     }
                     currentStreams--;
                     continue;
