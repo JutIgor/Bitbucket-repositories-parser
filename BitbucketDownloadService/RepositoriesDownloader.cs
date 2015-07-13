@@ -1,9 +1,9 @@
 ﻿using RepositoriesDownloader;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DownloadService
@@ -13,6 +13,8 @@ namespace DownloadService
     {
         [DataMember]
         private List<string> finished = new List<string>();
+        [IgnoreDataMember]
+        private List<string> cancelledDownloads = new List<string>();
         [IgnoreDataMember]
         private List<Task<string>> downloads = new List<Task<string>>();
         [IgnoreDataMember]
@@ -27,6 +29,7 @@ namespace DownloadService
         public void AllocateMemory()
         {
             this.downloads = new List<Task<string>>();
+            this.cancelledDownloads = new List<string>();
             this.loader = new Loader();
         }
 
@@ -43,6 +46,13 @@ namespace DownloadService
         public void Stop()
         {
             isStopped = true;
+            foreach (var item in cancelledDownloads)
+            {
+                using (var writer = new StreamWriter(Paths.logName, true))
+                {
+                    writer.WriteLine(item);
+                }
+            }
         }
 
         public void Download(string repositoriesFileName, string folder, string language)
@@ -73,20 +83,13 @@ namespace DownloadService
                 catch (AggregateException ex)
                 {
                     finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
-                    using (var writer = new StreamWriter(Paths.logName, true))
-                    {
-                        writer.WriteLine(ex.InnerException.Message);
-                    }
+                    cancelledDownloads.Add(ex.InnerException.Message);
                     currentStreams--;
                     continue;
                 }
-                catch (ThreadAbortException) { }
                 catch (Exception ex)
                 {
-                    using (var writer = new StreamWriter(Paths.logName, true))
-                    {
-                        writer.WriteLine(ex.ToString());
-                    }
+                    Trace.WriteLine(ex.ToString());
                     currentStreams--;
                     continue;
                 }
