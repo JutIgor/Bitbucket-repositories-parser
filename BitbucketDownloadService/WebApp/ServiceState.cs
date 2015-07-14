@@ -9,9 +9,9 @@ namespace DownloadService.WebApp
 {
     public class ServiceState
     {
-        public DateTime Time { get; set; }
-        public string State { get; set; }
-        public int DownloadedFiles { get; set; }
+        public DateTime Time { get; set; } // TODO: Fix time format
+        public string State { get; set; } // TODO: Add state 
+        public int DownloadedFiles { get; set; } 
 
         public ServiceState GetServiceState()
         {

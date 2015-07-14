@@ -33,6 +33,7 @@ namespace DownloadService
             this.downloads = new List<Task<string>>();
             this.cancelledDownloads = new List<string>();
             this.loader = new Loader();
+            DownloadsCounter += finished.Count;
         }
 
         public void StartDownloadHtmlCss()
