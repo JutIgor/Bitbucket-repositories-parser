@@ -1,5 +1,9 @@
 ﻿using System.ServiceProcess;
 using System.Threading;
+using Microsoft.Owin.Hosting;
+using System.Configuration;
+using System;
+using DownloadService.WebApp;
 
 namespace DownloadService
 {
@@ -9,6 +13,7 @@ namespace DownloadService
         private Thread threadJavaScript;
         private RepositoriesDownloader downloaderHtmlCss;
         private RepositoriesDownloader downloaderJavaScript;
+        private IDisposable webApp;
 
         public BitbucketDownloadService()
         {
@@ -17,6 +22,12 @@ namespace DownloadService
 
         protected override void OnStart(string[] args)
         {
+            var endpoint = string.Format("{0}://{1}",
+                ConfigurationManager.AppSettings["EndpointProtocol"],
+                ConfigurationManager.AppSettings["EndpointPort"]);
+
+            webApp = Microsoft.Owin.Hosting.WebApp.Start(endpoint, appBuilder => new Startup().Configuration(appBuilder));
+
             StartThreads();
         }
 

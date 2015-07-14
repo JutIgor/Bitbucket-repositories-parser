@@ -25,6 +25,8 @@ namespace DownloadService
         private bool isStopped;
         [IgnoreDataMember]
         public bool isFinished;
+        [DataMember]
+        public static int DownloadsCounter = 0;
 
         public void AllocateMemory()
         {
@@ -76,6 +78,7 @@ namespace DownloadService
                         downloads.Remove(finishedTask);
                         finished.Add(finishedTask.Result);
                         currentStreams--;
+                        DownloadsCounter++;
                     }
                     downloads.Add(loader.DownloadZipAsync(repository, fullPath));
                     currentStreams++;
