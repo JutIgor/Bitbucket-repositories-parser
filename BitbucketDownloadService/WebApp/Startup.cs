@@ -1,15 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Formatting;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
+﻿using DownloadService.Infrastructure;
 using Ninject;
-using DownloadService.Infrastructure;
+using Owin;
+using System.Web.Http;
 
 namespace DownloadService.WebApp
 {

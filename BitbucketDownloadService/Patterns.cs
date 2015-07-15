@@ -4,7 +4,7 @@ namespace DownloadService
 {
     public static class Patterns
     {
-        private const string repositoryPathPattern = @"(HtmlCss|JavaScript)\\(?<repoName>[^.]+)";
+        //private const string repositoryPathPattern = @"(HtmlCss|JavaScript)\\(?<repoName>[^.]+)"; // Need if you want to find repository name in filepath
         private const string repositoryLinkPattern = @"org/(?<repoName>[^/]+/[^/]+)";
         public const string HtmlCss = "HtmlCss";
         public const string JavaScript = "JavaScript";

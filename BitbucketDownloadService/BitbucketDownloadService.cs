@@ -1,9 +1,8 @@
-﻿using System.ServiceProcess;
-using System.Threading;
-using Microsoft.Owin.Hosting;
-using System.Configuration;
+﻿using DownloadService.WebApp;
 using System;
-using DownloadService.WebApp;
+using System.Configuration;
+using System.ServiceProcess;
+using System.Threading;
 
 namespace DownloadService
 {
