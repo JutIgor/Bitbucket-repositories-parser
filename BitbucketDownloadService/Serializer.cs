@@ -24,7 +24,7 @@ namespace DownloadService
         {
             string localDownloaderName = string.Format(localDownloader, language);
             var serializer = new DataContractSerializer(typeof(RepositoriesDownloader));
-            using (var file = new FileStream(localDownloaderName, FileMode.OpenOrCreate)) // Check FileMode
+            using (var file = new FileStream(localDownloaderName, FileMode.OpenOrCreate))
             {
                 if (new FileInfo(localDownloaderName).Length == 0) return new RepositoriesDownloader();
                 using (var reader = XmlDictionaryReader.CreateTextReader(file, new XmlDictionaryReaderQuotas()))
