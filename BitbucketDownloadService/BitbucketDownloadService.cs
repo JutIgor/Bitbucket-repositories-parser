@@ -34,7 +34,7 @@ namespace DownloadService
                 DownloadedFiles = 0
             };
 
-            webApp = Microsoft.Owin.Hosting.WebApp.Start(endpoint, appBuilder => new Startup().Configuration(appBuilder,state));
+            webApp = Microsoft.Owin.Hosting.WebApp.Start(endpoint, appBuilder => new Startup().Configuration(appBuilder, state));
 
             StartThreads();
         }
