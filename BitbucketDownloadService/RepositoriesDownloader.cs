@@ -26,7 +26,7 @@ namespace DownloadService
         [IgnoreDataMember]
         public bool isFinished;
         [DataMember]
-        public static int DownloadsCounter = 0;
+        public static int DownloadsCounter;
 
         public void AllocateMemory()
         {

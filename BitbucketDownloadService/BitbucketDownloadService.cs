@@ -80,5 +80,11 @@ namespace DownloadService
             downloaderHtmlCss = Serializer.DeserializeDownloader(Patterns.HtmlCss);
             downloaderJavaScript = Serializer.DeserializeDownloader(Patterns.JavaScript);
         }
+
+        public new void Dispose()
+        {
+            if (webApp != null)
+                webApp.Dispose();
+        }
     }
 }
