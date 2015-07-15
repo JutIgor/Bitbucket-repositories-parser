@@ -9,7 +9,7 @@ namespace DownloadService.WebApp
 {
     public class ServiceState
     {
-        public DateTime Time { get; set; } // TODO: Fix time format
+        public string Time { get; set; }
         public string State { get; set; } // TODO: Add state 
         public int DownloadedFiles { get; set; } 
 
@@ -17,7 +17,7 @@ namespace DownloadService.WebApp
         {
             return new ServiceState
             {
-                Time = DateTime.Now,
+                Time = Clock.GetTime(),
                 State = this.State,
                 DownloadedFiles = RepositoriesDownloader.DownloadsCounter // TODO: Add serialization for counter
             };

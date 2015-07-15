@@ -14,6 +14,7 @@ namespace DownloadService
         private RepositoriesDownloader downloaderHtmlCss;
         private RepositoriesDownloader downloaderJavaScript;
         private IDisposable webApp;
+        private ServiceState state;
 
         public BitbucketDownloadService()
         {
@@ -26,7 +27,14 @@ namespace DownloadService
                 ConfigurationManager.AppSettings["EndpointProtocol"],
                 ConfigurationManager.AppSettings["EndpointPort"]);
 
-            webApp = Microsoft.Owin.Hosting.WebApp.Start(endpoint, appBuilder => new Startup().Configuration(appBuilder));
+            state = new ServiceState
+            {
+                State = "Service is running",
+                Time = Clock.GetTime(),
+                DownloadedFiles = 0
+            };
+
+            webApp = Microsoft.Owin.Hosting.WebApp.Start(endpoint, appBuilder => new Startup().Configuration(appBuilder,state));
 
             StartThreads();
         }
