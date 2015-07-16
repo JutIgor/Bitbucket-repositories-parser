@@ -14,7 +14,7 @@ namespace DownloadService
         [DataMember]
         private List<string> finished = new List<string>();
         [IgnoreDataMember]
-        private List<string> cancelledDownloads = new List<string>();
+        private List<string> canceledDownloads = new List<string>();
         [IgnoreDataMember]
         private List<Task<string>> downloads = new List<Task<string>>();
         [IgnoreDataMember]
@@ -31,7 +31,7 @@ namespace DownloadService
         public void AllocateMemory()
         {
             this.downloads = new List<Task<string>>();
-            this.cancelledDownloads = new List<string>();
+            this.canceledDownloads = new List<string>();
             this.loader = new Loader();
             DownloadsCounter += finished.Count;
         }
@@ -49,7 +49,7 @@ namespace DownloadService
         public void Stop()
         {
             isStopped = true;
-            foreach (var item in cancelledDownloads)
+            foreach (var item in canceledDownloads)
             {
                 using (var writer = new StreamWriter(Paths.logName, true))
                 {
@@ -87,7 +87,7 @@ namespace DownloadService
                 catch (AggregateException ex)
                 {
                     finished.Add(Patterns.GetRepositoryName(ex.InnerException.Message));
-                    cancelledDownloads.Add(ex.InnerException.Message);
+                    canceledDownloads.Add(ex.InnerException.Message);
                     currentStreams--;
                     continue;
                 }

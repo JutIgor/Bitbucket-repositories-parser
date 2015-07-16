@@ -10,6 +10,6 @@ namespace DownloadService
         public static string JavaScriptRepositoriesFile = string.Format(filePath, "JavaScriptRepositories");
         public static string HtmlCssFolder = appDirectory + @"..\..\..\Bitbucket\HtmlCss\{0}";
         public static string JavaScriptFolder = appDirectory + @"..\..\..\Bitbucket\JavaScript\{0}";
-        public static string logName = appDirectory + @"..\..\..\Bitbucket\CancelledDownloads.txt";
+        public static string logName = appDirectory + @"..\..\..\Bitbucket\CanceledDownloads.txt";
     }
 }
